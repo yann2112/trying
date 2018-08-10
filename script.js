@@ -61,7 +61,12 @@ function startWebRTC(isOfferer) {
     }
   };
 
-  
+  // If user is offerer let the 'negotiationneeded' event create the offer
+  if (isOfferer) {
+    pc.onnegotiationneeded = () => {
+      pc.createOffer().then(localDescCreated).catch(onError);
+    }
+  }
 
   // When a remote stream arrives display it in the #remoteVideo element
   pc.ontrack = event => {
